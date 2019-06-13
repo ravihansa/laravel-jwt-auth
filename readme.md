@@ -1,4 +1,4 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+<p align="center">Laravel JWT Auth App</p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
@@ -10,11 +10,38 @@
 ## What is JSON Web Token?
 
 JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
-&nbsp;
-&nbsp;
+<br>
 In this application, I will look at using JWT to secure the Laravel APIs.
+&nbsp;
 
 ## How to setup this application?
+
+1) After cloning the application, you need to install it's dependencies,  
+- cd laravel-jwt-auth
+- composer install
+&nbsp;
+&nbsp;
+2) Then rename .env.example as .env and provide correct db details.
+&nbsp;
+&nbsp;
+3) After Generate the application key using following command,  
+- php artisan key:generate
+&nbsp;
+&nbsp;
+4) After that Generate JWT secret key using following command,
+&nbsp;
+&nbsp;
+5) Migrate the application using following command,
+- php artisan migrate
+&nbsp;
+&nbsp;
+6) Finally run the application using following command,
+&nbsp;
+&nbsp;
+- php artisan serve
+&nbsp;
+
+## How to create this application?
 
 1) Create laravel project,  
 - composer create-project --prefer-dist laravel/laravel laravel-jwt-auth "5.8.*"
@@ -74,32 +101,35 @@ Bellow i mentioned my postman requests...
 &nbsp;
 &nbsp;
 - http://127.0.0.1:8000/api/register
-&nbsp;
+<br>
 Method:- POST
-&nbsp;
+<br>
 Payload:- 
+<br>
 {	"name":"Name",
     "email":"email@gmail.com",
     "password":"12345678"
 }
-&nbsp;
+<br>
 &nbsp;
 - http://127.0.0.1:8000/api/authenticate
-&nbsp;
+<br>
 Method:- POST
-&nbsp;
+<br>
 Payload:- 
+<br>
 {   "email":"email@gmail.com",
     "password":"12345678"
 }
-&nbsp;
+<br>
 &nbsp;
 - http://127.0.0.1:8000/api/user
-&nbsp;
+<br>
 Method:- GET
-&nbsp;
+<br>
 Payload:- Key: Authorization Value: Bearer [insert your token]
+<br>
 &nbsp;
-&nbsp;
-
-- You can change above application as you wish and according to the requirements.
+<br>
+<br>
+<p>You can change above application as you wish and according to the requirements.</p>
