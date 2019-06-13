@@ -7,66 +7,99 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## About Laravel
+## What is JSON Web Token?
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+&nbsp;
+&nbsp;
+In this application, I will look at using JWT to secure the Laravel APIs.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## How to setup this application?
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1) Create laravel project,  
+- composer create-project --prefer-dist laravel/laravel laravel-jwt-auth "5.8.*"
+&nbsp;
+&nbsp;
+2) Then install the third-party JWT package we will use,  
+- composer require tymon/jwt-auth:dev-develop --prefer-source
+&nbsp;
+&nbsp;
+3) Open config/app.php and add the following provider to the providers array,  
+- Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+&nbsp;
+&nbsp;
+4) And add the following facades to the aliases array in the config/app.php,  
+- 'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,    
+- 'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+&nbsp;
+&nbsp;
+5) Now you need to publish the config file for JWT using following command,  
+- php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+&nbsp;
+&nbsp;
+6) After that set the jwt-auth secret by running the following command,  
+- php artisan jwt:secret
+&nbsp;
+&nbsp;
+7) Create User.php model file (Use my code),  
+&nbsp;
+&nbsp;
+8) Create database connection in .env file and run the migrate command to create the table on the database (I used default user migrations),      
+- php artisan migrate
+&nbsp;
+&nbsp;
+9) Create UserController (Use my code),  
+- php artisan make:controller /API/UserController
+&nbsp;
+&nbsp;
+10) Create the JwtMiddleware to protect private routes (Use my code),  
+- php artisan make:middleware JwtMiddleware  
+&nbsp;
+&nbsp;
+11) To register the above middleware, Open app/http/Kernel.php and add the following line in the $routeMiddleware array,  
+- 'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,  
+&nbsp;
+&nbsp;
+12) Next open routes/api.php file and add the routes as you wish (Use my code).  
+&nbsp;
+&nbsp;
+13) Finally run the following command and check the application using Postman tool.
+- php artisan serve  
+&nbsp;
+&nbsp;
 
-## Learning Laravel
+## How to check application using Postman tool?
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Bellow i mentioned my postman requests...
+&nbsp;
+&nbsp;
+- http://127.0.0.1:8000/api/register
+&nbsp;
+Method:- POST
+&nbsp;
+Payload:- 
+{	"name":"Name",
+    "email":"email@gmail.com",
+    "password":"12345678"
+}
+&nbsp;
+&nbsp;
+- http://127.0.0.1:8000/api/authenticate
+&nbsp;
+Method:- POST
+&nbsp;
+Payload:- 
+{   "email":"email@gmail.com",
+    "password":"12345678"
+}
+&nbsp;
+&nbsp;
+- http://127.0.0.1:8000/api/user
+&nbsp;
+Method:- GET
+&nbsp;
+Payload:- Key: Authorization Value: Bearer [insert your token]
+&nbsp;
+&nbsp;
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1400 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- You can change above application as you wish and according to the requirements.
